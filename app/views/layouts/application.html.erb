@@ -11,7 +11,13 @@
   </head>
 
   <body>
-    <%= yield %>
+    <nav class="nav d-flex justify-content-between border-bottom pt-3 px-3">
+      <p class="nav-link"><%= link_to 'Mr. Cocktail', cocktails_path %></p>
+      <p class="nav-link"><%= link_to 'New cocktail', new_cocktail_path %></p>
+    </nav>
+    <div class="container pt-5">
+      <%= yield %>
+    </div>
     <%= javascript_include_tag "application" %> <!-- from app/assets/javascripts/application.js -->
     <%= javascript_pack_tag "application" %>    <!-- from app/javascript/packs/application.js -->
   </body>
