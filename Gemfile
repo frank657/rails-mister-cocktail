@@ -29,6 +29,9 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# Security => Secret keys
+gem 'dotenv-rails', groups: [:development, :test]
+
 # Frontend
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass', '~> 5.6.1'

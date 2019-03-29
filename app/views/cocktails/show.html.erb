@@ -8,3 +8,15 @@
 <h3>Add ingredient</h3>
 <p><%= render 'doses/form', dose: @dose %></p>
 
+<h3>Add review</h3>
+<p><%= render 'reviews/form', review: @review %></p>
+
+
+<h3>Reviews</h3>
+<% @cocktail.reviews.each do |r| %>
+  <p><% r.rating.times do %>
+    <%= '🍸' %>
+  <% end %>
+  </p>
+  <p><%= r.content %></p>
+<% end %>
