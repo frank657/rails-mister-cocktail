@@ -12,7 +12,7 @@ class DosesController < ApplicationController
     if @dose.save
       redirect_to cocktail_path(@cocktail)
     else
-      render 'new'
+      redirect_back(fallback_location: root_path)
     end
   end
 
