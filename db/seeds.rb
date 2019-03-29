@@ -8,32 +8,78 @@
 
 require 'open-uri'
 
-url = 'https://raw.githubusercontent.com/maltyeva/iba-cocktails/master/recipes.json'
+# url = 'https://raw.githubusercontent.com/maltyeva/iba-cocktails/master/recipes.json'
+
+# cocktails_array = JSON.parse(open(url).read)
+
+# Dose.delete_all if Rails.env.development?
+# Ingredient.delete_all if Rails.env.development?
+# Cocktail.delete_all if Rails.env.development?
+
+# cocktails_array.each do |cocktail|
+#   c = Cocktail.create!(name: cocktail["name"])
+
+#   cocktail["ingredients"].each do |ing|
+#     i = Ingredient.find_or_create_by(name: ing["ingredient"])
+#     unless ing['amount'].nil?
+#       description = "#{ing['amount']} #{ing['unit']}"
+#       d = Dose.new(description: description)
+#       d.ingredient = i
+#       d.cocktail = c
+#       d.save
+#     end
+#   end
+# end
+
+# p "created #{Cocktail.count} cocktails"
+# p "created #{Ingredient.count} ingredients"
+# p "created #{Dose.count} doses"
+
+# -------------------
+
+url = 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic'
 
 cocktails_array = JSON.parse(open(url).read)
 
+Review.delete_all if Rails.env.development?
 Dose.delete_all if Rails.env.development?
 Ingredient.delete_all if Rails.env.development?
 Cocktail.delete_all if Rails.env.development?
 
-cocktails_array.each do |cocktail|
-  c = Cocktail.create!(name: cocktail["name"])
+cocktails_array["drinks"].each do |cocktail|
+  c = Cocktail.create(name: cocktail["strDrink"])
+  c.remote_photo_url = cocktail["strDrinkThumb"]
+  c.save
 
-  cocktail["ingredients"].each do |ing|
-    i = Ingredient.find_or_create_by(name: ing["ingredient"])
-    unless ing['amount'].nil?
-      description = "#{ing['amount']} #{ing['unit']}"
-      d = Dose.new(description: description)
+  rand(1..20).times do
+    r = Review.new(content: Faker::TvShows::GameOfThrones.quote)
+    c = Cocktail.all.sample
+    r.rating = rand(1..5)
+    r.cocktail = c
+    r.save
+  end
+
+  id = cocktail["idDrink"]
+  c_url = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=#{id}"
+  c_array = JSON.parse(open(c_url).read)
+
+  c_array["drinks"].each do |details|
+    counter = 1
+    until details["strIngredient#{counter}"] == ""
+      i = Ingredient.find_or_create_by!(name: details["strIngredient#{counter}"])
+      d = Dose.new(description: details["strMeasure#{counter}"])
       d.ingredient = i
       d.cocktail = c
       d.save
+      counter += 1
     end
   end
 end
 
+
+
 p "created #{Cocktail.count} cocktails"
 p "created #{Ingredient.count} ingredients"
 p "created #{Dose.count} doses"
+p "created #{Review.count} reviews"
 
-
-# {"name"=>"Rusty Nail", "glass"=>"old-fashioned", "category"=>"After Dinner Cocktail", "ingredients"=>[{"unit"=>"cl", "amount"=>4.5, "ingredient"=>"Whiskey", "label"=>"Scotch whisky"}, {"unit"=>"cl", "amount"=>2.5, "ingredient"=>"Drambuie"}], "garnish"=>"Lemon twist", "preparation"=>"Build into old-fashioned glass filled with ice. Stir gently."}

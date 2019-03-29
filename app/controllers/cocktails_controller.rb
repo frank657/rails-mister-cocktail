@@ -1,6 +1,6 @@
 class CocktailsController < ApplicationController
-  before_action :find_cocktail, only: [:show]
-  before_action :user_params, only: [:create]
+  before_action :find_cocktail, only: [:show, :edit, :update]
+  before_action :user_params, only: [:create, :update]
 
   def index
     @cocktails = Cocktail.all
@@ -13,7 +13,6 @@ class CocktailsController < ApplicationController
 
   def new
     @cocktail = Cocktail.new
-    raise
   end
 
   def create
@@ -25,17 +24,17 @@ class CocktailsController < ApplicationController
     end
   end
 
-  # def edit
-  # end
+  def edit
+  end
 
-  # def update
-  #   @cocktail.update(user_params)
-  #   if @cocktail.save
-  #     redirect_to cocktail_path(@cocktail)
-  #   else
-  #     render 'edit'
-  #   end
-  # end
+  def update
+    @cocktail.update(user_params)
+    if @cocktail.save
+      redirect_to cocktail_path(@cocktail)
+    else
+      render 'edit'
+    end
+  end
 
   # def destroy
   #   @cocktail.destroy
@@ -48,6 +47,6 @@ class CocktailsController < ApplicationController
   end
 
   def user_params
-    params.require(:cocktail).permit(:name)
+    params.require(:cocktail).permit(:name, :photo)
   end
 end

@@ -1,22 +1,36 @@
-<h1><%= @cocktail.name %></h1>
 
-<% @cocktail.doses.each do |d| %>
-  <p><%= d.description %> <%= d.ingredient.name %> <%= link_to 'Delete', dose_path(d), method: :delete, data: { confirm: 'Are you sure?' } %></p>
-<% end %>
+<div class="d-flex justify-content-between">
+  <div class="card p-5 mr-3 mb-5">
+    <h2 class="mb-5"><%= @cocktail.name %></h2>
+    <% @cocktail.doses.each do |d| %>
+      <p><%= d.description %> <%= d.ingredient.name %> <%= link_to 'Delete', dose_path(d), method: :delete, data: { confirm: 'Are you sure?' } %></p>
+    <% end %>
+    <h5 class="mt-5">Missing an ingredient? Add it below!</h5>
+    <p><%= render 'doses/form', dose: @dose %></p>
+  </div>
 
+  <div>
+    <%= cl_image_tag @cocktail.photo, height: 300, width: 400, crop: :fill, class: 'rounded' %>
+    <%= simple_form_for(@cocktail) do |f| %>
+      <%= f.input :photo %>
+      <%= f.input :photo_cache, as: :hidden %>
+      <%= f.submit %>
+    <% end %>
+  </div>
+</div>
 
-<h3>Add ingredient</h3>
-<p><%= render 'doses/form', dose: @dose %></p>
+<div class="card p-5 mr-3 mb-5">
+  <h3>Add review</h3>
+  <p><%= render 'reviews/form', review: @review %></p>
+</div>
 
-<h3>Add review</h3>
-<p><%= render 'reviews/form', review: @review %></p>
-
-
-<h3>Reviews</h3>
-<% @cocktail.reviews.each do |r| %>
-  <p><% r.rating.times do %>
-    <%= '🍸' %>
+<div class="card p-5 mr-3 mb-5">
+  <h3>Reviews</h3>
+  <% @cocktail.reviews.each do |r| %>
+    <p><% r.rating.times do %>
+      <%= '🍸' %>
+    <% end %>
+    </p>
+    <p><%= r.content %></p>
   <% end %>
-  </p>
-  <p><%= r.content %></p>
-<% end %>
+</div>
