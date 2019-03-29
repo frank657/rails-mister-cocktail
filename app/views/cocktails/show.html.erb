@@ -20,17 +20,17 @@
 </div>
 
 <div class="card p-5 mr-3 mb-5">
-  <h3>Add review</h3>
+  <h3 class="mb-3">Add review</h3>
   <p><%= render 'reviews/form', review: @review %></p>
 </div>
 
 <div class="card p-5 mr-3 mb-5">
-  <h3>Reviews</h3>
+  <h3 class="mb-5">Reviews</h3>
   <% @cocktail.reviews.each do |r| %>
     <p><% r.rating.times do %>
       <%= '🍸' %>
     <% end %>
     </p>
-    <p><%= r.content %></p>
+    <p class="border-bottom pb-4"><%= r.content %></p>
   <% end %>
 </div>
