@@ -3,7 +3,10 @@
   <div class="card p-5 mr-3 mb-5">
     <h2 class="mb-5"><%= @cocktail.name %></h2>
     <% @cocktail.doses.each do |d| %>
-      <p><%= d.description %> <%= d.ingredient.name %> <%= link_to 'Delete', dose_path(d), method: :delete, data: { confirm: 'Are you sure?' } %></p>
+      <p><%= d.description %> <%= d.ingredient.name %> <%= link_to dose_path(d), method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-dark small-icon' do %>
+          <i class="fas fa-trash ml-1"></i>
+        <% end %>
+      </p>
     <% end %>
     <h5 class="mt-5">Missing an ingredient? Add it below!</h5>
     <p><%= render 'doses/form', dose: @dose %></p>
